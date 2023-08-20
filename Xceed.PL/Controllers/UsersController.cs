@@ -33,7 +33,7 @@ namespace Xceed.PL.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "admin, store")]
+        [Authorize(Roles = "subAdmin ,admin ,user")]
         public async Task<IActionResult> EditProfile()
         {
             var email = User.FindFirstValue(ClaimTypes.Email);

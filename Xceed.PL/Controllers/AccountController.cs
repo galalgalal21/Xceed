@@ -51,7 +51,7 @@ namespace Xceed.PL.Controllers
 
                     if (result.Succeeded)
                     {
-                        //await userManager.AddToRoleAsync(user, "store");
+                        await userManager.AddToRoleAsync(user, "user");
                         return RedirectToAction("Login");
                     }
                     else

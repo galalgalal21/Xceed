@@ -159,7 +159,7 @@
                             </a>
                         </li>
                     @*}*@
-                    @if (signInManager.IsSignedIn(User) && User.IsInRole("admin"))
+                    @if (signInManager.IsSignedIn(User) && User.IsInRole("admin") || User.IsInRole("subAdmin"))
                     {
                         <li>
                             <a href="javascript:void(0);" class="menu-toggle">
@@ -172,7 +172,9 @@
                                 </li>
                             </ul>
                         </li>
-
+                    }
+                    @if (signInManager.IsSignedIn(User) && User.IsInRole("admin") )
+                    {
                         <li>
                             <a href="javascript:void(0);" class="menu-toggle">
                                 <i class="material-icons">pie_chart</i>

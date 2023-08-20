@@ -1,4 +1,5 @@
 ﻿@model List<EmployeeVM>
+@inject SignInManager<AppUser> signInManager
 @{
     ViewData["Title"] = "Index";
 }
@@ -10,9 +11,10 @@
     <link href="~/Layout/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
     <link href="~/Layout/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet" />
 }
-
-<a asp-controller="Employee" asp-action="Create" class="btn btn-primary ">Create New Employee</a>
-
+@if (signInManager.IsSignedIn(User) && User.IsInRole("admin"))
+    {
+        <a asp-controller="Employee" asp-action="Create" class="btn btn-primary ">Create New Employee</a>
+    }
 
 <br />
 <br />
@@ -48,8 +50,11 @@
                                     <th>Line Of Business</th>
                                     <th>Language</th>
                                     <th>Language Level</th>
-                                    <th>Details</th>
-                                    <th>Update</th>
+                                    @if (signInManager.IsSignedIn(User) && User.IsInRole("admin"))
+                                    {
+                                        <th>Details</th>
+                                        <th>Update</th>
+                                    }
                                     <th>Delete</th>
                                 </tr>
                             </thead>
@@ -72,8 +77,11 @@
                                                 }
                                             
                                         </td>
-                                        <td><a asp-controller="Employee" asp-action="Details" asp-route-id="@item.id" class="btn btn-success">Details</a></td>
-                                        <td><a asp-controller="Employee" asp-action="Edit" asp-route-id="@item.id" class="btn btn-info">Update</a></td>
+                                        @if (signInManager.IsSignedIn(User) && User.IsInRole("admin"))
+                                        {
+                                            <td><a asp-controller="Employee" asp-action="Details" asp-route-id="@item.id" class="btn btn-success">Details</a></td>
+                                            <td><a asp-controller="Employee" asp-action="Edit" asp-route-id="@item.id" class="btn btn-info">Update</a></td>
+                                        }
                                         <td><a asp-controller="Employee" asp-action="Delete" asp-route-id="@item.id" class="btn btn-danger">Delete</a></td>
                                     </tr>
                                 }

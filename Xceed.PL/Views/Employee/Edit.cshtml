@@ -11,6 +11,7 @@
     SelectList Accounts = new SelectList(Model.accountVMs, "id", "name");
     SelectList Languages = new SelectList(Model.languageVMs, "id", "name");
     SelectList LanguageLevels = new SelectList(Model.language_LevelVMs, "id", "name");
+    SelectList LineOfBusiness = new SelectList(Model.lineOfBusinessVMs, "id", "name");
 }
 
 <form asp-controller="Employee" asp-action="Edit" class="form-group" >
@@ -57,9 +58,10 @@
 
     <div class="form-group">
         <div class="custom-dropdown">
-            <select asp-for="line_Of_BusinessId" class="form-select custom-select" id="LineOfBusnissList">
-                <option>Choose Line Of Busniss</option>
-
+            <select asp-for="line_Of_BusinessId" asp-items="LineOfBusiness" class="form-select custom-select" id="LineOfBusnissListElem">
+               
+                <option value="">Choose Line Of Busniss</option>
+               
             </select>
             <span class="dropdown-icon">
                 <i class="fas fa-chevron-down"></i>
@@ -84,8 +86,21 @@
 
 
     <div class="form-group">
-        <select name="SelectedLanguageLevelIds" multiple asp-items="LanguageLevels" class="form-select custom-select">
+        <select name="SelectedLanguageLevelIds" multiple  class="form-select custom-select">
             <option value="">-- Select Language Level --</option>
+            @foreach (var item in Model.language_LevelVMs)
+            {
+                var id = @Model.SelectedLanguageLevelIds.FirstOrDefault(x => x == item.id);
+                if (Model.SelectedLanguageLevelIds.FirstOrDefault(x => x == item.id) != 0 )
+                {
+                    <option value="@id" selected>@item.name</option>
+                }
+                else
+                {
+                    <option value="@item.id">@item.name</option>
+                }
+
+            }
         </select>
         <span asp-validation-for="SelectedLanguageLevelIds" class="text-danger"></span>
     </div>
@@ -113,8 +128,8 @@
         function populateLineOfBusiness(accountId) {
             var accountId = $("#account option:selected").val();
 
-            $("#LineOfBusnissList").empty();
-            $("#LineOfBusnissList").append("<option>Choose Line Of Busniss</option>");
+            $("#LineOfBusnissListElem").empty();
+            $("#LineOfBusnissListElem").append("<option>Choose Line Of Busniss</option>");
 
             $.ajax({
 
@@ -124,7 +139,7 @@
                 success: function (res) {
                     console.log(res);
                     $.each(res, function (i, e) {
-                        $("#LineOfBusnissList").append("<option value='" + e.id + "'>" + e.name + "</option>");
+                        $("#LineOfBusnissListElem").append("<option value='" + e.id + "'>" + e.name + "</option>");
                     });
                 }
 
