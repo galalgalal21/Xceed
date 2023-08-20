@@ -1,0 +1,147 @@
+﻿@model AddEditEmployeeVM
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+@{
+    ViewData["Title"] = "Edit";
+
+    SelectList Accounts = new SelectList(Model.accountVMs, "id", "name");
+    SelectList Languages = new SelectList(Model.languageVMs, "id", "name");
+    SelectList LanguageLevels = new SelectList(Model.language_LevelVMs, "id", "name");
+}
+
+<form asp-controller="Employee" asp-action="Edit" class="form-group" >
+    <div class="m-2">
+        <input asp-for="id" type="hidden"/>
+
+        <label asp-for="name" class="py-2">Employee Name</label>
+        <input class="form-control" type="text" asp-for="name" />
+        <div class="m-auto text-center">
+            <span asp-validation-for="name" class="text-danger shadow-sm "></span>
+        </div>
+    </div>
+
+    <div class="m-2">
+        <label asp-for="national_id" class="py-2">  National Id </label>
+        <input class="form-control" type="number" asp-for="national_id" />
+        <div class="m-auto text-center">
+            <span asp-validation-for="national_id" class="text-danger shadow-sm"></span>
+        </div>
+    </div>
+
+    <div class="m-2">
+        <label asp-for="date_of_birth" class="py-2"> Date Of Birth</label>
+        <input class="form-control" type="date" asp-for="date_of_birth" />
+        <div class="m-auto text-center">
+            <span asp-validation-for="date_of_birth" class="text-danger shadow-sm"></span>
+        </div>
+    </div>
+
+    <br />
+    <br />
+
+    <div class="form-group">
+        <div class="custom-dropdown">
+            <select id="account" asp-for="accountId" asp-items="Accounts" class="form-select custom-select">
+                <option value="">-- Select Account --</option>
+            </select>
+            <span class="dropdown-icon">
+                <i class="fas fa-chevron-down"></i>
+            </span>
+        </div>
+        <span asp-validation-for="accountId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <div class="custom-dropdown">
+            <select asp-for="line_Of_BusinessId" class="form-select custom-select" id="LineOfBusnissList">
+                <option>Choose Line Of Busniss</option>
+
+            </select>
+            <span class="dropdown-icon">
+                <i class="fas fa-chevron-down"></i>
+            </span>
+        </div>
+        <span asp-validation-for="line_Of_BusinessId" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <div class="custom-dropdown">
+            <select asp-for="languageId" asp-items="Languages" class="form-select custom-select">
+                <option value="">-- Select Language --</option>
+            </select>
+            <span class="dropdown-icon">
+                <i class="fas fa-chevron-down"></i>
+            </span>
+        </div>
+        <span asp-validation-for="languageId" class="text-danger"></span>
+    </div>
+
+
+
+    <div class="form-group">
+        <select name="SelectedLanguageLevelIds" multiple asp-items="LanguageLevels" class="form-select custom-select">
+            <option value="">-- Select Language Level --</option>
+        </select>
+        <span asp-validation-for="SelectedLanguageLevelIds" class="text-danger"></span>
+    </div>
+
+   
+
+
+    <div style="margin-top:2rem">
+        <input type="submit" class="btn btn-primary my-5 border shadow-5 px-5 py-3 rounded-3" value="Edit" />
+        <a asp-action="index" type="button" class="btn btn-info " style="margin-left:2rem">Back to list</a>
+    </div>
+
+</form>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+
+    $(function () {
+
+        //$("#account").change(function () {
+        function populateLineOfBusiness(accountId) {
+            var accountId = $("#account option:selected").val();
+
+            $("#LineOfBusnissList").empty();
+            $("#LineOfBusnissList").append("<option>Choose Line Of Busniss</option>");
+
+            $.ajax({
+
+                type: "POST",
+                url: "/Employee/GetLineOfBusinessDataByAccountId",
+                data: { AccountId: accountId },
+                success: function (res) {
+                    console.log(res);
+                    $.each(res, function (i, e) {
+                        $("#LineOfBusnissList").append("<option value='" + e.id + "'>" + e.name + "</option>");
+                    });
+                }
+
+            });
+
+
+        }
+
+        populateLineOfBusiness($("#account option:selected").val());
+
+        // Attach an event handler for the account selection change
+        $("#account").change(function () {
+            var accountId = $("#account option:selected").val();
+            populateLineOfBusiness(accountId);
+        });
+
+    });
+
+</script>
+

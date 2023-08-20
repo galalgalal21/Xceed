@@ -1,0 +1,63 @@
+﻿@model List<EmployeeVM>
+
+<h2>@ViewData["Title"]</h2>
+@{
+    ViewData["Title"] = "LineChart";
+}
+
+<h2>LineChart</h2>
+
+<canvas id="languageLineChart" width="400" height="200"></canvas>
+
+
+<script src="~/Layout/plugins/chartjs/Chart.min.js"></script>
+
+<script>
+    var employeeData = @Html.Raw(Json.Serialize(Model));
+
+    var languageCounts = {};
+    var languageLabels = [];
+
+    employeeData.forEach(function (employee) {
+        var language = employee.language || 'Unknown';
+        if (!languageCounts[language]) {
+            languageCounts[language] = 0;
+            languageLabels.push(language);
+        }
+        languageCounts[language]++;
+    });
+
+    var ctx = document.getElementById('languageLineChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: languageLabels,
+            datasets: [{
+                label: 'Employee Distribution by Language',
+                data: languageLabels.map(function (language) {
+                    return languageCounts[language];
+                }),
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Employees'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Language'
+                    }
+                }
+            }
+        }
+    });
+</script>

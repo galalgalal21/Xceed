@@ -1,0 +1,41 @@
+﻿@model EmployeeVM
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+<h3>Are You Sure to Delete this Employee</h3>
+
+<div class="row">
+    <div class="col-6">
+        <form asp-action="Delete" asp-controller="Employee">
+            <input hidden asp-for="id" />
+            
+            <label asp-for="name"> Name</label>
+            <input class="form-control" type="text" asp-for="name" readonly />
+            <br />
+
+            <label asp-for="national_id">National Id</label>
+            <input class="form-control" type="text" asp-for="national_id" readonly />
+            <br />
+
+            <label asp-for="date_of_birth">Date Of Birth</label>
+            <input class="form-control" type="text" asp-for="date_of_birth" readonly />
+            <br />
+
+            <label asp-for="accountId">Account</label>
+            <input class="form-control" type="text" asp-for="accountId" readonly />
+            <br />
+
+            <label asp-for="line_Of_BusinessId">Hire Date</label>
+            <input class="form-control" type="date" asp-for="line_Of_BusinessId" readonly />
+            <br />
+
+           
+
+            <input type="submit" class="btn btn-danger" value="Delete" /> |
+            <a class="btn btn-light" asp-action="Index">Back To List</a>
+        </form>
+    </div>
+
+</div>

@@ -1,0 +1,53 @@
+﻿@model EmployeeVM
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card-body mb-3">
+            <h4 class="card-title"> Name : @Model.name</h4>
+        </div>
+        <div class="card-body mb-3">
+            <h4 class="card-title">National Id : @Model.national_id</h4>
+        </div>
+        <div class="card-body mb-3">
+            <h4 class="card-title dob-cell">Date Of Birth : @Model.date_of_birth</h4>
+        </div>
+        <div class="card-body mb-3">
+            <h4 class="card-title">Account : @Model.account</h4>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        
+        <div class="card-body mb-3">
+            <h4 class="card-title">Line Of Business : @Model.line_Of_Business</h4>
+        </div>
+        <div class="card-body mb-3">
+            <h4 class="card-title">Language : @Model.language</h4>
+        </div>
+        <div class="card-body mb-3">
+            <h4 class="card-title">
+                Language Level : @foreach (var level in @Model.EmployeeLanguageLevels)
+                {
+                    <h4>@level ,</h4>
+                }
+            </h4>
+        </div>
+        
+
+    </div>
+</div>
+
+<div class="row my-5">
+    <div class="col-md-5"></div>
+    <div class="col-md-5">
+        <a asp-action="index" asp-controller="Employee" class="btn btn-primary m-5 w-25">Back to list</a>
+    </div>
+</div>
+
+
+

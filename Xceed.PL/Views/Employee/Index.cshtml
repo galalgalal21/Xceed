@@ -1,0 +1,165 @@
+﻿@model List<EmployeeVM>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Employee</h2>
+
+
+@section BootstrapSelect{
+    <link href="~/Layout/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/Layout/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet" />
+}
+
+<a asp-controller="Employee" asp-action="Create" class="btn btn-primary ">Create New Employee</a>
+
+
+<br />
+<br />
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>All Employee</h2>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="javascript:void(0);">Action</a></li>
+                                <li><a href="javascript:void(0);">Another action</a></li>
+                                <li><a href="javascript:void(0);">Something else here</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable text-center font-weight-bold">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>National Id</th>
+                                    <th>Date Of Birth</th>
+                                    <th>Age</th>
+                                    <th>Account</th>
+                                    <th>Line Of Business</th>
+                                    <th>Language</th>
+                                    <th>Language Level</th>
+                                    <th>Details</th>
+                                    <th>Update</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="employee-row">
+                                        <td>@item.name</td>
+                                        <td>@item.national_id</td>
+                                        <td class="dob-cell">@item.date_of_birth</td>
+                                        <td class="age-cell">@item.age</td>
+                                        <td>@item.account</td>
+                                        <td>@item.line_Of_Business</td>
+                                        <td>@item.language</td>
+                                        <td>
+
+                                            @foreach (var level in item.EmployeeLanguageLevels)
+                                                {
+                                                    <span>@level ,</span>
+                                                }
+                                            
+                                        </td>
+                                        <td><a asp-controller="Employee" asp-action="Details" asp-route-id="@item.id" class="btn btn-success">Details</a></td>
+                                        <td><a asp-controller="Employee" asp-action="Edit" asp-route-id="@item.id" class="btn btn-info">Update</a></td>
+                                        <td><a asp-controller="Employee" asp-action="Delete" asp-route-id="@item.id" class="btn btn-danger">Delete</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section DataTableScripts{
+
+    <script src="~/Layout/plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <script src="~/Layout/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+
+
+    <script src="~/Layout/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+    <script src="~/Layout/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
+    <script src="~/Layout/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
+    <script src="~/Layout/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
+    <script src="~/Layout/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
+    <script src="~/Layout/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
+    <script src="~/Layout/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
+
+
+
+    <script>
+
+        function calculateAge(dateOfBirth) {
+            var dob = new Date(dateOfBirth);
+            var today = new Date();
+            var age = today.getFullYear() - dob.getFullYear();
+            var monthDiff = today.getMonth() - dob.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        // Call the function for each employee row
+        document.addEventListener("DOMContentLoaded", function () {
+            var rows = document.querySelectorAll(".employee-row");
+            rows.forEach(function (row) {
+                var dobCell = row.querySelector(".dob-cell");
+                var ageCell = row.querySelector(".age-cell");
+                var dob = dobCell.textContent;
+                var age = calculateAge(dob);
+                ageCell.textContent = age;
+            });
+        });
+
+
+        $(function () {
+            $('.js-basic-example').DataTable({
+                responsive: true,
+                paging: true,
+                pageLength: 10,
+                bSort: true,
+                bFilter: true,
+                bLengthChange: false,
+                //bInfo: false,
+                lengthMenu: [[3, 5, 10, 25, 50, -1], [3, 5, 10, 25, 50, "All"]],
+
+            });
+
+
+
+            var table = $('.js-basic-example').DataTable();
+
+            new $.fn.dataTable.Buttons(table, {
+                buttons: [
+                    'copy', 'excel', 'pdf', 'csv', 'print'
+                ]
+            });
+
+            table.buttons().container()
+                .appendTo($('.col-sm-6:eq(0)', table.table().container()));
+
+
+        });
+
+    </script>
+}
+
